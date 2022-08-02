@@ -1,0 +1,33 @@
+.profile__subtitle {
+  margin: 0;
+  padding-bottom: 14px;
+  width: 100%;
+  font-family: 'Inter';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 21.78px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@media (max-width: 626px)and (min-width: 424px) {
+  .profile__subtitle {
+    margin-top: 18px;
+    font-size: 14px;
+    line-height: 16.96px;
+    text-align: center;
+    min-height: 14px;
+  }
+}
+
+@media (max-width: 425px)and (min-width: 320px) {
+  .profile__subtitle {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 16.96px;
+    text-align: center;
+    min-height: 14px;
+  }
+}

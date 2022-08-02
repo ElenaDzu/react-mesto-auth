@@ -1,0 +1,4 @@
+.eelement__like {
+display: flex;
+flex-direction: column;
+}
