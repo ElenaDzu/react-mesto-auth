@@ -1,10 +1,14 @@
 import { React, useEffect, useState } from "react";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
+import * as ApiAuth from "./ApiAuth.js"
 import "../index.css";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import { api } from "../utils/Api.js";
 import Header from "./Header.js";
+import Login from "./Login";
+import Register from "./Register";
 import Main from "./Main.js";
-import Footer from "./Footer.js";
 import PopupWithForm from "./PopupWithForm.js";
 import ImagePopup from "./ImagePopup.js";
 import EditProfilePopup from "./EditProfilePopup.js";
@@ -12,7 +16,63 @@ import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({});
+  const [userInfo, setUserInfo] = useState({
+    username: '',
+    email: '',
+  });
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const history = useHistory();
+
+  const tokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) {
+      return;
+    }
+
+    ApiAuth
+      .getContent(jwt)
+      .then(({ username, email }) => {
+        setUserInfo({ username, email });
+        setIsLoggedIn(true);
+      });
+  };
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push('/ducks');
+    }
+  }, [isLoggedIn]);
+
+  const onLogin = (data) => {
+    return ApiAuth
+      .authorize(data)
+      .then(({ jwt, user: { username, email } }) => {
+        setUserInfo({ username, email });
+        setIsLoggedIn(true);
+        localStorage.setItem('jwt', jwt);
+      });
+  };
+
+  const onRegister = (data) => {
+    return ApiAuth
+      .register(data)
+      .then(() => {
+        history.push('/login');
+      });
+  };
+
+  const onLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('jwt');
+    history.push('/login');
+  };
+
+  const [currentUser, setCurrentUser ] = useState({});
   useEffect(() => {
     api
       .getUserInfo()
@@ -134,16 +194,26 @@ function App() {
       <div className="container">
         <div className="page">
           <Header />
-          <Main
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onEditAvatar={handleEditAvatarClick}
-            onCardClick={handleCardClick}
-          />
-          <Footer />
+          <Switch>
+            <Route path="/sign-in">
+              <Login />
+            </Route>
+            <Route path="/sign-up">
+              <Register />
+            </Route>
+             <ProtectedRoute
+              path="/"
+              loggedIn={isLoggedIn}
+              component={Main}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+             />
+          </Switch>
         </div>
 
         <EditProfilePopup
@@ -171,6 +241,8 @@ function App() {
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
         />
+
+
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
