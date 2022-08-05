@@ -2,32 +2,33 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Register({ onRegister }) {
-
   return (
-    <section className="Page">
-      <h1>Регистрация</h1>
+    <section className="page">
+      <h1 className="page__title">Регистрация</h1>
       <input
         required
-        className="Page__text"
+        className="page__text"
         defaultValue=""
         type="email"
         placeholder="Email"
       />
       <input
         required
-        className="Page__text"
+        className="page__text"
         defaultValue=""
         type="text"
         placeholder="Пароль"
       />
-        <button type="submit" className="Page-btn">
-          Зарегистрироваться
-        </button>
-      <div className="login__signup">
-        <p>Уже зарегистрированы?</p>
-        <Link to="/Register" className="signup__link">
-          Войти
-        </Link>
+      <button type="submit" className="page__btn">
+        Зарегистрироваться
+      </button>
+      <div className="page__signup">
+        <p>
+          Уже зарегистрированы?
+          <Link to="/Register" className="page__link">
+            Войти
+          </Link>
+        </p>
       </div>
     </section>
   );

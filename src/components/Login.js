@@ -6,23 +6,23 @@ function Login({ onLogin }) {
 
 
   return (
-    <section className="Page">
-      <h1>Вход</h1>
+    <section className="page">
+      <h1 className="page__title">Вход</h1>
       <input
         required
-        className="Page__text"
+        className="page__text"
         defaultValue=""
         type="email"
         placeholder="Email"
       />
       <input
         required
-        className="Page__text"
+        className="page__text"
         defaultValue=""
         type="text"
         placeholder="Пароль"
       />
-      <button type="submit" className="Page-btn">
+      <button type="submit" className="page__btn">
         Войти
       </button>
     </section>

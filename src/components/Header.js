@@ -18,14 +18,14 @@ function Header() {
         </a>
         <Switch>
           <Route path="/sign-in">
-            <a href="/sign-up">Регистрация</a>
+            <a className="header__link" href="/sign-up">Регистрация</a>
           </Route>
           <Route path="/sign-up">
-            <a href="/sign-in">Войти</a>
+            <a className="header__link" href="/sign-in">Войти</a>
           </Route>
           <Route path="/">
           {currentUser.email}
-          <a href="/sign-in">Выйти</a>
+          <a className="header__link" href="/sign-in">Выйти</a>
           </Route>
         </Switch>
       </header>
