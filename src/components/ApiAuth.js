@@ -1,28 +1,31 @@
-export const BASE_URL = 'https://api.nomoreparties.co';
+export const BASE_URL = 'https://auth.nomoreparties.co';
 
 const checkResponse = (response) => {
+  console.log(response)
   return response.ok ? response.json() : Promise.reject(new Error(`Ошибка ${response.status}: ${response.statusText}`));
 };
 
 const headers = {
-  'Accept': 'application/json',
   'Content-Type': 'application/json',
 };
 
-export const register = ({ username, password, email }) => {
-  return fetch(`${BASE_URL}/auth/local/register`, {
+export const register = ({ password, email }) => {
+  return fetch(`${BASE_URL}/signup`, {
     headers,
     method: 'POST',
-    body: JSON.stringify({ username, password, email }),
+    body: JSON.stringify({ password, email }),
+    mode:'cors'
   })
-    .then(res => checkResponse(res));
+    .then(res => checkResponse(res))
+    .catch(err => console.log(checkResponse(err)));
+
 };
 
-export const authorize = ({ username: identifier, password }) => {
-  return fetch(`${BASE_URL}/auth/local`, {
+export const authorize = ({ password, email }) => {
+  return fetch(`${BASE_URL}/signin`, {
     headers,
     method: 'POST',
-    body: JSON.stringify({ identifier, password }),
+    body: JSON.stringify({ password, email }),
   })
     .then(res => {checkResponse(res)});
 };

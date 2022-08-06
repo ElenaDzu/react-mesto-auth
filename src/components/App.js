@@ -199,7 +199,9 @@ function App() {
               <Login />
             </Route>
             <Route path="/sign-up">
-              <Register />
+              <Register
+              onRegister={onRegister}
+              />
             </Route>
              <ProtectedRoute
               path="/"
