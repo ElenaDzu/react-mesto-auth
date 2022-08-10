@@ -1,0 +1,7 @@
+.popup__infotooltip-logo {
+  margin: 60px auto 0;
+  background-image: url(../../../images/success.png);
+  color: black;
+  width: 120px;
+  height: 120px;
+}

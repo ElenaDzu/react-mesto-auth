@@ -29,7 +29,12 @@
 @import url(./blocks/popup/__block/popup__block.css);
 @import url(./blocks/popup/_opened/popup_opened.css);
 @import url(./blocks/popup/_image/popup_image.css);
-@import url(./blocks/popup/__infoToolTip/popup__infoToolTip.css);
+@import url(./blocks/popup/__infotooltip/popup__infotooltip.css);
+@import url(./blocks/popup/__infotooltip-container/popup__infotooltip-container.css);
+@import url(./blocks/popup/__infotooltip-logo/popup__infotooltip-logo.css);
+@import url(./blocks/popup/__infotooltip-logo/_error/popup__infotooltip-logo_error.css);
+@import url(./blocks/popup/__infotooltip-title/popup__infotooltip-title.css);
+@import url(./blocks/popup/_infotooltip/popup_infotooltip.css);
 @import url(./blocks/popup/__close-btn/popup__close-btn.css);
 @import url(./blocks/popup/__container/popup__container.css);
 @import url(./blocks/popup/__image-container/popup__image-container.css);

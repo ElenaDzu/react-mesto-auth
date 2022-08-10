@@ -1,7 +1,7 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState} from "react";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
-import * as ApiAuth from "./ApiAuth.js"
+import * as ApiAuth from "../utils/ApiAuth.js";
 import "../index.css";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import { api } from "../utils/Api.js";
@@ -14,28 +14,27 @@ import ImagePopup from "./ImagePopup.js";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
+import InfoTooltipPopup from "./InfoTooltipPopup.js";
 
 function App() {
   const [userInfo, setUserInfo] = useState({
-    username: '',
-    email: '',
+    email: "",
+    password: "",
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
 
   const tokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
+    const jwt = localStorage.getItem("jwt");
     if (!jwt) {
       return;
     }
 
-    ApiAuth
-      .getContent(jwt)
-      .then(({ username, email }) => {
-        setUserInfo({ username, email });
-        setIsLoggedIn(true);
-      });
+    ApiAuth.getContent(jwt).then(({ email, password }) => {
+      setUserInfo({ email, password });
+      setIsLoggedIn(true);
+    });
   };
 
   useEffect(() => {
@@ -44,35 +43,34 @@ function App() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      history.push('/ducks');
+      history.push("/");
     }
   }, [isLoggedIn]);
 
   const onLogin = (data) => {
-    return ApiAuth
-      .authorize(data)
-      .then(({ jwt, user: { username, email } }) => {
-        setUserInfo({ username, email });
+    return ApiAuth.authorize(data).then(
+      ({ jwt, user: { email, password } }) => {
+        setUserInfo({ email, password });
         setIsLoggedIn(true);
-        localStorage.setItem('jwt', jwt);
-      });
+        localStorage.setItem("jwt", jwt);
+      }
+    );
   };
 
   const onRegister = (data) => {
-    return ApiAuth
-      .register(data)
-      .then(() => {
-        history.push('/login');
-      });
+    return ApiAuth.register(data).then(() => {
+      handleRegisterSubmit()
+      history.push("/login");
+    });
   };
 
   const onLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('jwt');
-    history.push('/login');
+    localStorage.removeItem("jwt");
+    history.push("/login");
   };
 
-  const [currentUser, setCurrentUser ] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
   useEffect(() => {
     api
       .getUserInfo()
@@ -92,6 +90,8 @@ function App() {
 
   const [selectedCard, setSelectedCard] = useState(false);
 
+  const [isInfoTooltipPopup, setInfoTooltipPopup] = useState(false);
+
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   }
@@ -108,11 +108,16 @@ function App() {
     setSelectedCard(card);
   }
 
+  function handleRegisterSubmit() {
+    setInfoTooltipPopup(true);
+  }
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard(false);
+    setInfoTooltipPopup(false);
   }
 
   function handleUpdateUser({ name, about }) {
@@ -199,11 +204,9 @@ function App() {
               <Login />
             </Route>
             <Route path="/sign-up">
-              <Register
-              onRegister={onRegister}
-              />
+              <Register onRegister={onRegister} />
             </Route>
-             <ProtectedRoute
+            <ProtectedRoute
               path="/"
               loggedIn={isLoggedIn}
               component={Main}
@@ -214,7 +217,8 @@ function App() {
               onAddPlace={handleAddPlaceClick}
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}
-             />
+              onRegisterSubmit={handleRegisterSubmit}
+            />
           </Switch>
         </div>
 
@@ -230,6 +234,13 @@ function App() {
           onAddPlace={handleAddPlace}
         />
 
+        <InfoTooltipPopup
+          isOpen={false}
+          onClose={closeAllPopups}
+          popup={isInfoTooltipPopup}
+          name="infotooltip"
+        />
+
         <PopupWithForm
           isOpen={false}
           onClose={closeAllPopups}
@@ -238,14 +249,15 @@ function App() {
         >
           <input type="submit" defaultValue="Да" className="popup__save-btn" />
         </PopupWithForm>
+
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
         />
 
-
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        
       </div>
     </CurrentUserContext.Provider>
   );

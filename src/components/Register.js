@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import App from "./App.js";
 import "../index.css";
 
-function Register({ onRegister }) {
+function Register({ onRegister, onRegisterSubmit  }) {
   const [registerData, setRegisterData] = useState({
     email: "",
     password: "",
@@ -34,7 +35,6 @@ function Register({ onRegister }) {
         <input
           required
           className="page__text"
-          defaultValue=""
           type="email"
           placeholder="Email"
           value={registerData.email}
@@ -44,7 +44,6 @@ function Register({ onRegister }) {
         <input
           required
           className="page__text"
-          defaultValue=""
           type="text"
           placeholder="Пароль"
           value={registerData.password}
