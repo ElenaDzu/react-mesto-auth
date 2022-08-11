@@ -104,6 +104,10 @@ function App() {
     setSelectedCard(card);
   }
 
+  function handleRegisterSubmit() {
+    setInfoTooltipPopup(true);
+  }
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
@@ -243,6 +247,7 @@ function App() {
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+        
       </div>
     </CurrentUserContext.Provider>
   );

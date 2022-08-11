@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../index.css";
 
-function Register({ onRegister }) {
+function Register({ onRegister}) {
   const [registerData, setRegisterData] = useState({
     email: "",
     password: "",
