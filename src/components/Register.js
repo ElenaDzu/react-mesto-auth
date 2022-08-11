@@ -34,7 +34,6 @@ function Register({ onRegister }) {
         <input
           required
           className="page__text"
-          defaultValue=""
           type="email"
           placeholder="Email"
           value={registerData.email}
@@ -44,7 +43,6 @@ function Register({ onRegister }) {
         <input
           required
           className="page__text"
-          defaultValue=""
           type="text"
           placeholder="Пароль"
           value={registerData.password}

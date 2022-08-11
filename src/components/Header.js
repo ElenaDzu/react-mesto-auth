@@ -1,11 +1,8 @@
-import { React, useState } from "react";
+import { React } from "react";
 import logoPath from "../images/logo.png";
 import { Route, Switch } from "react-router-dom";
 
-function Header() {
-
-  const [currentUser, setCurrentUser ] = useState({});
-
+function Header({ onLogout, userInfo }) {
   return (
     <>
       <header className="header">
@@ -18,14 +15,20 @@ function Header() {
         </a>
         <Switch>
           <Route path="/sign-in">
-            <a className="header__link" href="/sign-up">Регистрация</a>
+            <a className="header__link" href="/sign-up">
+              Регистрация
+            </a>
           </Route>
           <Route path="/sign-up">
-            <a className="header__link" href="/sign-in">Войти</a>
+            <a className="header__link" href="/sign-in">
+              Войти
+            </a>
           </Route>
           <Route path="/">
-          {currentUser.email}
-          <a className="header__link" href="/sign-in">Выйти</a>
+            <div className="header__email">{userInfo?.email}</div>
+            <a className="header__link" onClick={onLogout} href="/sign-in">
+              Выйти
+            </a>
           </Route>
         </Switch>
       </header>
