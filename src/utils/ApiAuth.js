@@ -34,7 +34,6 @@ export const authorize = ({ password, email }) => {
       }
       return response.json();
     })
-    .catch((err) => console.log(err));
 };
 
 export const getContent = (token) => {
@@ -48,5 +47,4 @@ export const getContent = (token) => {
     .then((response) => {
       return response.json();
     })
-    .catch((err) => console.log(err));
 };

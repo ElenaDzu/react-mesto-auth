@@ -4,7 +4,6 @@ import { Route, Switch } from "react-router-dom";
 
 function Header({ onLogout, userInfo }) {
   return (
-    <>
       <header className="header">
         <a href="#">
           <img
@@ -24,7 +23,7 @@ function Header({ onLogout, userInfo }) {
               Войти
             </a>
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <div className="header__email">{userInfo?.email}</div>
             <a className="header__link" onClick={onLogout} href="/sign-in">
               Выйти
@@ -32,7 +31,6 @@ function Header({ onLogout, userInfo }) {
           </Route>
         </Switch>
       </header>
-    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../index.css";
 
@@ -43,7 +43,7 @@ function Register({ onRegister}) {
         <input
           required
           className="page__text"
-          type="text"
+          type="password"
           placeholder="Пароль"
           value={registerData.password}
           onChange={handleChange}

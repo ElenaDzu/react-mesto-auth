@@ -20,8 +20,22 @@ function App() {
   const [userInfo, setUserInfo] = useState({
     email: "",
   });
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+
+  const [selectedCard, setSelectedCard] = useState(false);
+
+  const [infoStatus, setInfoStatus] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [cards, setCards] = useState([]);
+
+  const [currentUser, setCurrentUser] = useState({});
+
   const history = useHistory();
 
   const tokenCheck = () => {
@@ -30,23 +44,28 @@ function App() {
       return;
     }
 
-    ApiAuth.getContent(jwt).then(({ data: { email } }) => {
-      console.log();
-      setUserInfo({ email });
-      setIsLoggedIn(true);
-      history.push("/");
-    });
+    ApiAuth.getContent(jwt)
+      .then(({ data: { email } }) => {
+        setUserInfo({ email });
+        setIsLoggedIn(true);
+        history.push("/");
+      })
+      .catch((err) => console.log(err));
   };
   tokenCheck();
 
   const onLogin = (data) => {
-    return ApiAuth.authorize(data).then(({ token }) => {
-      setIsLoggedIn(true);
-      localStorage.setItem("jwt", token);
-      tokenCheck();
-      history.push("/");
-      return;
-    });
+    return ApiAuth.authorize(data)
+      .then(({ token }) => {
+        setIsLoggedIn(true);
+        localStorage.setItem("jwt", token);
+        tokenCheck();
+        history.push("/");
+        return;
+      })
+      .catch((e) => {
+        setInfoStatus("fail");
+      });
   };
 
   const onRegister = (data) => {
@@ -66,27 +85,18 @@ function App() {
     history.push("/sign-in");
   };
 
-  const [currentUser, setCurrentUser] = useState({});
   useEffect(() => {
-    api
-      .getUserInfo()
-      .then((currentUser) => {
-        setCurrentUser(currentUser);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-
-  const [selectedCard, setSelectedCard] = useState(false);
-
-  const [infoStatus, setInfoStatus] = useState(false);
+    if (isLoggedIn) {
+      api
+        .getUserInfo()
+        .then((currentUser) => {
+          setCurrentUser(currentUser);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [isLoggedIn]);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -152,17 +162,18 @@ function App() {
       });
   }
 
-  const [cards, setCards] = useState([]);
   useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (isLoggedIn) {
+      api
+        .getInitialCards()
+        .then((cards) => {
+          setCards(cards);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [isLoggedIn]);
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
@@ -203,6 +214,7 @@ function App() {
               <Register onRegister={onRegister} />
             </Route>
             <ProtectedRoute
+              exact
               path="/"
               loggedIn={isLoggedIn}
               component={Main}
@@ -247,7 +259,6 @@ function App() {
         />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-        
       </div>
     </CurrentUserContext.Provider>
   );
