@@ -207,13 +207,7 @@ function App() {
         <div className="page">
           <Header userInfo={userInfo} onLogout={onLogout} />
           <Switch>
-            <Route path="/sign-in">
-              <Login onLogin={onLogin} />
-            </Route>
-            <Route path="/sign-up">
-              <Register onRegister={onRegister} />
-            </Route>
-            <ProtectedRoute
+          <ProtectedRoute
               exact
               path="/"
               loggedIn={isLoggedIn}
@@ -226,6 +220,12 @@ function App() {
               onEditAvatar={handleEditAvatarClick}
               onCardClick={handleCardClick}
             />
+            <Route path="/sign-in">
+              <Login onLogin={onLogin} />
+            </Route>
+            <Route path="/sign-up">
+              <Register onRegister={onRegister} />
+            </Route>
           </Switch>
         </div>
 
