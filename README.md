@@ -12,4 +12,4 @@
 - FIGMA;
 - React.js
 
-Для ознакомления с проектом пройдите по ссылке:  https://elenadzu.github.io/react-mesto-auth/index.html
+Для ознакомления с проектом пройдите по ссылке:  https://elenadzu.github.io/react-mesto-auth/
